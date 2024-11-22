@@ -14,12 +14,6 @@ pub fn Joinable::to_list[T, E](scheme : Joinable[T, E], t : T) -> List[E] {
   Joinable::elements(scheme, t)
 }
 
-// TODO:
-// fn to_seq
-// fn to_seq_from
-// fn to_rev_seq
-// fn add_seq
-
 pub fn Joinable::to_array_slice[T, E](
   scheme : Joinable[T, E],
   t : T,
@@ -86,11 +80,11 @@ pub fn Joinable::of_array[T, E : Compare](
   scheme : Joinable[T, E],
   a : Array[E]
 ) -> T {
-  fn yield(accu, i, j) {
+  fn yield_(accu, i, j) {
     Joinable::union(scheme, accu, of_sorted_unique_array_slice(scheme, a, i, j))
   }
 
-  foreach_increasing_run(E::compare, yield, Joinable::empty(scheme), a)
+  foreach_increasing_run(yield_, Joinable::empty(scheme), a)
 }
 
 pub fn Joinable::of_list[T, E : Compare](
@@ -104,4 +98,8 @@ pub fn Joinable::of_list[T, E : Compare](
   xs |> List::to_array |> of_array
 }
 
-// TODO: Enum module
+// TODO:
+// fn to_seq
+// fn to_seq_from
+// fn to_rev_seq
+// fn add_seq

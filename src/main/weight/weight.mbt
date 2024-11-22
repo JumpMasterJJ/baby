@@ -129,11 +129,8 @@ fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
 }
 
 fn destruct[E](t : Tree[E]) -> (Tree[E], E, Tree[E]) {
-  match t {
-    // TODO: panic or assert or raise ?
-    TLeaf => panic()
-    TNode(~l, ~v, ~r, ..) => (l, v, r)
-  }
+  guard let TNode(~l, ~v, ~r, ..) = t
+  (l, v, r)
 }
 
 fn destructw[E](w : Int, t : Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {

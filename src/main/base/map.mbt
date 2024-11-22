@@ -32,12 +32,10 @@ pub fn Joinable::lax_join[T, E : Compare](
   if tree_below_key(scheme, l, v) && key_below_tree(scheme, v, r) {
     join(l, v, r)
   } else {
-    // TODO: error ?
     union(scheme, l, add(scheme, v, r))
   }
 }
 
-// TODO: what's type of return value
 pub fn Joinable::map[T, E : Compare](
   scheme : Joinable[T, E],
   f : (E) -> E,

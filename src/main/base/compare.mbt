@@ -1,4 +1,3 @@
-// TODO: simple version
 pub fn Joinable::compare[T, E : Compare](
   scheme : Joinable[T, E],
   t1 : T,

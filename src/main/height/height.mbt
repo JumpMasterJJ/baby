@@ -1,4 +1,3 @@
-// TODO: Enable assertion
 fn max(x : Int, y : Int) -> Int {
   if x <= y {
     y
@@ -29,7 +28,6 @@ fn leaf[E]() -> Tree[E] {
   TLeaf
 }
 
-// FIXME: false actually
 let constant_time_cardinal = false
 
 fn cardinal[E](t : Tree[E]) -> Int {
@@ -98,7 +96,7 @@ fn tripleton[E](x : E, y : E, z : E) -> Tree[E] {
   create2(h, singleton(x), y, singleton(z))
 }
 
-// TODO: of_sorted_unique_array_slice
+// TODO: fn of_sorted_unique_array_slice
 
 fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
   match (t1, t2) {
@@ -110,11 +108,8 @@ fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
 }
 
 fn destruct[E](t : Tree[E]) -> (Tree[E], E, Tree[E]) {
-  match t {
-    // TODO: panic or assert or raise ?
-    TLeaf => panic()
-    TNode(~l, ~v, ~r, ..) => (l, v, r)
-  }
+  guard let TNode(~l, ~v, ~r, ..) = t
+  (l, v, r)
 }
 
 fn bal[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {

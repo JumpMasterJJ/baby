@@ -78,33 +78,14 @@ pub fn Joinable::split13[T, E : Compare](
   }
 }
 
-// TODO: compare with OCaml
-pub fn Joinable::split_last[T, E](
-  scheme : Joinable[T, E],
-  l : T,
-  k : E,
-  r : T
-) -> (T, E) {
-  let view = scheme.view
-  let join = scheme.join
-  match view(r) {
-    Leaf => (l, k)
-    Node(l_, k_, r_) => {
-      let (r, m) = split_last(scheme, l_, k_, r_)
-      (join(l, k, r), m)
-    }
-  }
-}
-
-// TODO: compare with OCaml
 pub fn Joinable::join2[T, E](scheme : Joinable[T, E], l : T, r : T) -> T {
   let view = scheme.view
   let join = scheme.join
-  match view(l) {
-    Leaf => r
-    Node(ll, m, lr) => {
-      let (l_, k) = split_last(scheme, ll, m, lr)
-      join(l_, k, r)
+  match (view(l), view(r)) {
+    (Leaf, _) => r
+    (_, Leaf) => l
+    (_, Node(rl, rv, rr)) => {
+      join(l, min_elt_1(scheme, rv, rl), remove_min_elt_1(scheme, rl, rv, rr))
     }
   }
 }

@@ -1,6 +1,4 @@
-// TODO: remove 'compare' arg & refact with loop
 fn foreach_increasing_run_in_slice[A : Compare, B](
-  compare : (A, A) -> Int,
   yield_ : (B, Int, Int) -> B,
   accu : B,
   a : Array[A],
@@ -15,13 +13,11 @@ fn foreach_increasing_run_in_slice[A : Compare, B](
     // A new run begins at index [i].
     let last = a[i]
     let j = i + 1
-    scan(compare, yield_, accu, a, i, last, j, n)
+    scan(yield_, accu, a, i, last, j, n)
   }
 }
 
-// TODO: remove 'compare' arg & refact with loop
 fn scan[A : Compare, B](
-  compare : (A, A) -> Int,
   yield_ : (B, Int, Int) -> B,
   accu : B,
   a : Array[A],
@@ -36,40 +32,35 @@ fn scan[A : Compare, B](
     yield_(accu, i, j)
   } else {
     let current = a[j]
-    if compare(last, current) < 0 {
+    if A::compare(last, current) < 0 {
       // The current run continues
       let last = current
       let j = j + 1
-      scan(compare, yield_, accu, a, i, last, j, n)
+      scan(yield_, accu, a, i, last, j, n)
     } else {
       // The run [i, j] ends here, and the loop continues.
       let accu = yield_(accu, i, j)
       let last = current
       let i = j
       let j = j + 1
-      scan(compare, yield_, accu, a, i, last, j, n)
+      scan(yield_, accu, a, i, last, j, n)
     }
   }
 }
-
-// TODO: move
-typealias Run = (Int, Int)
 
 fn compress[A : Compare](a : Array[A]) -> Int {
   a.dedup()
   a.length()
 }
 
-// TODO: reomve compare
 fn foreach_increasing_run[A : Compare, B](
-  compare : (A, A) -> Int,
   yield_ : (B, Int, Int) -> B,
   accu : B,
   a : Array[A]
 ) -> B {
   let i = 0
   let n = a.length()
-  foreach_increasing_run_in_slice(compare, yield_, accu, a, i, n)
+  foreach_increasing_run_in_slice(yield_, accu, a, i, n)
 }
 
 fn increasing_runs[A : Compare](
@@ -80,5 +71,5 @@ fn increasing_runs[A : Compare](
     List::add(runs, (i, j))
   }
 
-  foreach_increasing_run(compare, yield_, List::Nil, a).rev()
+  foreach_increasing_run(yield_, List::Nil, a).rev()
 }

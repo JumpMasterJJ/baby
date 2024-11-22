@@ -6,25 +6,20 @@ pub fn Joinable::cardinal_get[T, E](
   let view = scheme.view
   let cardinal = scheme.cardinal
   guard 0 <= i && i < cardinal(t)
-  match view(t) {
-    Leaf => panic()
-    Node(l, v, r) => {
-      let cl = cardinal(l)
-      if i == cl {
-        v
-      } else if i < cl {
-        cardinal_get(scheme, l, i)
-      } else {
-        cardinal_get(scheme, r, i - (cl + 1))
-      }
-    }
+  guard let Node(l, v, r) = view(t)
+  let cl = cardinal(l)
+  if i == cl {
+    v
+  } else if i < cl {
+    cardinal_get(scheme, l, i)
+  } else {
+    cardinal_get(scheme, r, i - (cl + 1))
   }
 }
 
 pub fn Joinable::get[T, E](scheme : Joinable[T, E], t : T, i : Int) -> E! {
-  let view = scheme.view
   let cardinal = scheme.cardinal
-  let constant_time_cardinl = scheme.constant_time_cardinal
+  let constant_time_cardinal = scheme.constant_time_cardinal
   if constant_time_cardinal {
     if 0 <= i && i < cardinal(t) {
       cardinal_get(scheme, t, i)
