@@ -191,15 +191,15 @@ pub fn Set::cut_and_get[E : Compare](
 
 pub fn Set::iter[E](s : Set[E]) -> Iter[E] {
   Iter::new(
-    fn(yield) {
+    fn(yield_) {
       match s {
         TLeaf => IterContinue
         TNode(~l, ~v, ~r, ..) =>
-          if l.iter().run(yield) == IterEnd {
+          if l.iter().run(yield_) == IterEnd {
             return IterEnd
-          } else if yield(v) == IterEnd {
+          } else if yield_(v) == IterEnd {
             return IterEnd
-          } else if r.iter().run(yield) == IterEnd {
+          } else if r.iter().run(yield_) == IterEnd {
             return IterEnd
           } else {
             return IterContinue
