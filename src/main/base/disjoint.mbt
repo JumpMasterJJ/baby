@@ -21,7 +21,7 @@
 ///     }
 ///   }
 /// }
-/// 
+///
 
 ///|
 pub fn Joinable::disjoint[T, E : Compare](
@@ -32,9 +32,8 @@ pub fn Joinable::disjoint[T, E : Compare](
   let view = scheme.view
   match (view(t1), view(t2)) {
     (Leaf, _) | (_, Leaf) => true // fast path
-    (_, _) => {
+    (_, _) =>
       not(physical_equal(t1, t2)) && // fast path
       Enum::disjoint(scheme, Enum::enum_(scheme, t1), Enum::enum_(scheme, t2))
-    }
   }
 }

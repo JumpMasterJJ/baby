@@ -84,8 +84,7 @@ pub fn Joinable::join2[T, E](scheme : Joinable[T, E], l : T, r : T) -> T {
   match (view(l), view(r)) {
     (Leaf, _) => r
     (_, Leaf) => l
-    (_, Node(rl, rv, rr)) => {
+    (_, Node(rl, rv, rr)) =>
       join(l, min_elt_1(scheme, rv, rl), remove_min_elt_1(scheme, rl, rv, rr))
-    }
   }
 }

@@ -21,7 +21,6 @@
 ///   }
 /// }
 
-
 ///|
 /// This version of `diff` guarantees that if the result is
 /// equal to `t1` then `t1` itself is returned.
@@ -36,7 +35,7 @@ pub fn Joinable::diff[T, E : Compare](
   match (view(t1), view(t2)) {
     (Leaf, _) => leaf()
     (_, Leaf) => t1
-    (Node(l1, k1, r1), Node(l2, k2, r2)) => {
+    (Node(l1, k1, r1), Node(l2, k2, r2)) =>
       if physical_equal(t1, t2) {
         // Fast path
         leaf()
@@ -56,14 +55,11 @@ pub fn Joinable::diff[T, E : Compare](
         let r = diff(scheme, r1, r2)
         if b {
           join2(scheme, l, r)
+        } else if scheme.compare(l, l1) == 0 && scheme.compare(r, r1) == 0 {
+          t1
         } else {
-          if scheme.compare(l, l1) == 0 && scheme.compare(r, r1) == 0 {
-            t1
-          } else {
-            join(l, k1, r)
-          }
+          join(l, k1, r)
         }
       }
-    }
   }
 }

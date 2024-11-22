@@ -42,7 +42,7 @@ fn Joinable::inter_aux[T, E : Compare](
   let leaf = scheme.leaf
   match (view(t1), view(t2)) {
     (Leaf, _) | (_, Leaf) => leaf()
-    (Node(_), Node(l2, k2, r2)) => {
+    (Node(_), Node(l2, k2, r2)) =>
       if physical_equal(t1, t2) {
         // Fast path
         t2
@@ -67,7 +67,6 @@ fn Joinable::inter_aux[T, E : Compare](
           join2(scheme, l, r)
         }
       }
-    }
   }
 }
 

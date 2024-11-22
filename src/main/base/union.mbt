@@ -43,7 +43,7 @@ pub fn Joinable::union[T, E : Compare](
   match (view(t1), view(t2)) {
     (Leaf, _) => t2
     (_, Leaf) => t1
-    (Node(l1, k1, r1), Node(l2, k2, r2)) => {
+    (Node(l1, k1, r1), Node(l2, k2, r2)) =>
       if scheme.is_empty(l1) && scheme.is_empty(r1) {
         add(scheme, k1, t2)
       } else if scheme.is_empty(l2) && scheme.is_empty(r2) {
@@ -58,6 +58,5 @@ pub fn Joinable::union[T, E : Compare](
           join(l, k2, r)
         }
       }
-    }
   }
 }

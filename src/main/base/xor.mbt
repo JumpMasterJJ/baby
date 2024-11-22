@@ -23,7 +23,6 @@
 ///   }
 /// }
 
-
 pub fn Joinable::xor[T, E : Compare](
   scheme : Joinable[T, E],
   t1 : T,
@@ -35,7 +34,7 @@ pub fn Joinable::xor[T, E : Compare](
   match (view(t1), view(t2)) {
     (Leaf, _) => t2
     (_, Leaf) => t1
-    (Node(_), Node(l2, k2, r2)) => {
+    (Node(_), Node(l2, k2, r2)) =>
       if physical_equal(t1, t2) {
         // Fast path
         leaf()
@@ -56,6 +55,5 @@ pub fn Joinable::xor[T, E : Compare](
           join(l, k2, r)
         }
       }
-    }
   }
 }
