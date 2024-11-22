@@ -1,13 +1,13 @@
 // TODO: remove 'compare' arg & refact with loop
-fn foreach_increasing_run_in_slice[A: Compare, B](
-  compare: (A, A) -> Int,
-  yield: (B, Int, Int) -> B,
-  accu: B,
-  a: Array[A],
-  i: Int,
-  n: Int
+fn foreach_increasing_run_in_slice[A : Compare, B](
+  compare : (A, A) -> Int,
+  yield : (B, Int, Int) -> B,
+  accu : B,
+  a : Array[A],
+  i : Int,
+  n : Int
 ) -> B {
-  guard (0 <= i && i <= n && n <= Array::length(a))
+  guard 0 <= i && i <= n && n <= Array::length(a)
   if i == n {
     // There are no more runs.
     accu
@@ -20,17 +20,17 @@ fn foreach_increasing_run_in_slice[A: Compare, B](
 }
 
 // TODO: remove 'compare' arg & refact with loop
-fn scan[A: Compare, B](
-  compare: (A, A) -> Int,
-  yield: (B, Int, Int) -> B,
-  accu: B,
-  a: Array[A],
-  i: Int,
-  last: A,
-  j: Int,
-  n: Int
+fn scan[A : Compare, B](
+  compare : (A, A) -> Int,
+  yield : (B, Int, Int) -> B,
+  accu : B,
+  a : Array[A],
+  i : Int,
+  last : A,
+  j : Int,
+  n : Int
 ) -> B {
-  guard (0 <= i && i <= j && j <= n && n <= Array::length(a));
+  guard 0 <= i && i <= j && j <= n && n <= Array::length(a)
   if j == n {
     // The run [i, j] ends here, and the loop ends as well.
     yield(accu, i, j)
@@ -45,7 +45,7 @@ fn scan[A: Compare, B](
       // The run [i, j] ends here, and the loop continues.
       let accu = yield(accu, i, j)
       let last = current
-      let i  = j
+      let i = j
       let j = j + 1
       scan(compare, yield, accu, a, i, last, j, n)
     }
@@ -55,24 +55,30 @@ fn scan[A: Compare, B](
 // TODO: move
 typealias Run = (Int, Int)
 
-fn compress[A: Compare](a: Array[A]) -> Int {
+fn compress[A : Compare](a : Array[A]) -> Int {
   a.dedup()
   a.length()
 }
 
 // TODO: reomve compare
-fn foreach_increasing_run[A: Compare, B](
-  compare: (A, A) -> Int,
-  yield: (B, Int, Int) -> B,
-  accu: B,
-  a: Array[A]
+fn foreach_increasing_run[A : Compare, B](
+  compare : (A, A) -> Int,
+  yield : (B, Int, Int) -> B,
+  accu : B,
+  a : Array[A]
 ) -> B {
   let i = 0
   let n = a.length()
   foreach_increasing_run_in_slice(compare, yield, accu, a, i, n)
 }
 
-fn increasing_runs[A: Compare](compare: (A, A) -> Int, a: Array[A]) -> List[Run] {
-  fn yield(runs, i, j) { List::add(runs, (i, j)) }
+fn increasing_runs[A : Compare](
+  compare : (A, A) -> Int,
+  a : Array[A]
+) -> List[Run] {
+  fn yield(runs, i, j) {
+    List::add(runs, (i, j))
+  }
+
   foreach_increasing_run(compare, yield, List::Nil, a).rev()
 }

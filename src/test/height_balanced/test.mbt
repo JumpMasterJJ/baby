@@ -1,7 +1,7 @@
 // These testcases are based on MoonBit's @immut/sorted_set library.
 
 test "new" {
-  let empty: @height.Set[Int] = @height.empty()
+  let empty : @height.Set[Int] = @height.empty()
   inspect!(empty, content="@height.of_array([])")
 }
 
@@ -100,13 +100,25 @@ test "map" {
 }
 
 test "all" {
-  inspect!(@height.of_array([2, 4, 6]).for_all(fn(v) { v % 2 == 0 }), content="true")
-  inspect!(@height.of_array([1, 3, 5]).for_all(fn(v) { v % 2 == 0 }), content="false")
+  inspect!(
+    @height.of_array([2, 4, 6]).for_all(fn(v) { v % 2 == 0 }),
+    content="true",
+  )
+  inspect!(
+    @height.of_array([1, 3, 5]).for_all(fn(v) { v % 2 == 0 }),
+    content="false",
+  )
 }
 
 test "any" {
-  inspect!(@height.of_array([1, 4, 3]).exists(fn(v) { v % 2 == 0 }), content="true")
-  inspect!(@height.of_array([1, 5, 3]).exists(fn(v) { v % 2 == 0 }), content="false")
+  inspect!(
+    @height.of_array([1, 4, 3]).exists(fn(v) { v % 2 == 0 }),
+    content="true",
+  )
+  inspect!(
+    @height.of_array([1, 5, 3]).exists(fn(v) { v % 2 == 0 }),
+    content="false",
+  )
 }
 
 test "fold" {
@@ -143,10 +155,7 @@ test "contain" {
     @height.of_array([7, 2, 9, 4, 6, 3, 8, 1]).add(5).mem(5),
     content="true",
   )
-  inspect!(
-    @height.of_array([7, 2, 9, 4, 6, 3, 8, 1]).mem(5),
-    content="false",
-  )
+  inspect!(@height.of_array([7, 2, 9, 4, 6, 3, 8, 1]).mem(5), content="false")
 }
 
 test "to_array" {
@@ -188,14 +197,8 @@ test "add" {
     @height.of_array([2]).add(1).add(3),
     content="@height.of_array([1, 2, 3])",
   )
-  inspect!(
-    @height.of_array([1, 2]).add(1),
-    content="@height.of_array([1, 2])",
-  )
-  inspect!(
-    @height.of_array([2, 3]).add(3),
-    content="@height.of_array([2, 3])",
-  )
+  inspect!(@height.of_array([1, 2]).add(1), content="@height.of_array([1, 2])")
+  inspect!(@height.of_array([2, 3]).add(3), content="@height.of_array([2, 3])")
   inspect!(
     @height.of_array([1, 2, 3]).add(1),
     content="@height.of_array([1, 2, 3])",
@@ -236,7 +239,10 @@ test "remove" {
 }
 
 test "min" {
-  inspect!(@height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).min_elt!(), content="1")
+  inspect!(
+    @height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).min_elt!(),
+    content="1",
+  )
 }
 
 test "min_option" {
@@ -249,7 +255,10 @@ test "min_option" {
 }
 
 test "max" {
-  inspect!(@height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).max_elt!(), content="9")
+  inspect!(
+    @height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).max_elt!(),
+    content="9",
+  )
 }
 
 test "max_option" {
@@ -304,7 +313,9 @@ test "to_string" {
 
 test "iter" {
   let mut s = ""
-  @height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).iter_(fn(x) { s += x.to_string() })
+  @height.of_array([7, 2, 9, 4, 5, 6, 3, 8, 1]).iter_(
+    fn(x) { s += x.to_string() },
+  )
   inspect!(s, content="123456789")
   let empty : @height.Set[Int] = @height.of_array([])
   s = ""

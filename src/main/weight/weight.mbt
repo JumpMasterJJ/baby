@@ -1,5 +1,9 @@
-fn max(x: Int, y: Int) -> Int {
-  if x <= y { y } else { x }
+fn max(x : Int, y : Int) -> Int {
+  if x <= y {
+    y
+  } else {
+    x
+  }
 }
 
 // fn height[E](t: Tree[E]) -> Int {
@@ -9,17 +13,17 @@ fn max(x: Int, y: Int) -> Int {
 //   }
 // }
 
-fn weight[E](t: Tree[E]) -> Int {
+fn weight[E](t : Tree[E]) -> Int {
   match t {
     TLeaf => 1
-    TNode (~w, ..) => w
+    TNode(~w, ..) => w
   }
 }
 
-fn view[E](t: Tree[E]) -> View[Tree[E], E] {
+fn view[E](t : Tree[E]) -> View[Tree[E], E] {
   match t {
     TLeaf => Leaf
-    TNode (~l, ~v, ~r, ..) => Node (l, v, r)
+    TNode(~l, ~v, ~r, ..) => Node(l, v, r)
   }
 }
 
@@ -29,33 +33,33 @@ fn leaf[E]() -> Tree[E] {
 
 let constant_time_cardinal = true
 
-fn cardinal[E](t: Tree[E]) -> Int {
+fn cardinal[E](t : Tree[E]) -> Int {
   weight(t) - 1
 }
 
 let alpha = 29
 
-fn not_left_heavy(wl: Int, wr: Int) -> Bool {
+fn not_left_heavy(wl : Int, wr : Int) -> Bool {
   alpha * wl <= (100 - alpha) * wr
 }
 
-fn left_heavy(wl: Int, wr: Int) -> Bool {
+fn left_heavy(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wl, wr) |> not
 }
 
-fn not_right_heavy(wl: Int, wr: Int) -> Bool {
+fn not_right_heavy(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wr, wl)
 }
 
-fn right_heavy(wl: Int, wr: Int) -> Bool {
+fn right_heavy(wl : Int, wr : Int) -> Bool {
   not_right_heavy(wl, wr) |> not
 }
 
-fn like_weights(wl: Int, wr: Int) -> Bool {
+fn like_weights(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wl, wr) && not_right_heavy(wl, wr)
 }
 
-fn siblings[E](l: Tree[E], r: Tree[E]) -> Bool {
+fn siblings[E](l : Tree[E], r : Tree[E]) -> Bool {
   like_weights(weight(l), weight(r))
 }
 
@@ -63,30 +67,31 @@ fn siblings[E](l: Tree[E], r: Tree[E]) -> Bool {
 //   Int::abs(height(l) - height(r)) <= 3
 // }
 
-fn check[E](t: Tree[E]) -> Unit {
+fn check[E](t : Tree[E]) -> Unit {
   match t {
     TLeaf => ()
-    TNode (~l, ~r, ~w, ..) => {
+    TNode(~l, ~r, ~w, ..) => {
       check(l)
       check(r)
       guard w == max(weight(l), weight(r))
       guard siblings(l, r)
+
     }
   }
 }
 
-fn create2[E](w: Int, l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn create2[E](w : Int, l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   guard siblings(l, r)
   guard w == weight(l) + weight(r)
-  TNode (~l, ~v, ~r, ~w)
+  TNode(~l, ~v, ~r, ~w)
 }
 
-fn create[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn create[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let w = weight(l) + weight(r)
   create2(w, l, v, r)
 }
 
-fn create1[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn create1[E](wl : Int, l : Tree[E], v : E, wr : Int, r : Tree[E]) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   let w = wl + wr
   create2(w, l, v, r)
@@ -96,42 +101,42 @@ fn create1[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
 //   create(l, v ,r)
 // }
 
-fn singleton[E](x: E) -> Tree[E] {
+fn singleton[E](x : E) -> Tree[E] {
   let w = 2
   create2(w, TLeaf, x, TLeaf)
 }
 
-fn doubleton[E: Compare](x: E, y: E) -> Tree[E] {
+fn doubleton[E : Compare](x : E, y : E) -> Tree[E] {
   guard E::compare(x, y) < 0
   let w = 3
   create2(w, TLeaf, x, singleton(y))
 }
 
-fn tripleton[E: Compare](x: E, y: E, z: E) -> Tree[E] {
+fn tripleton[E : Compare](x : E, y : E, z : E) -> Tree[E] {
   guard E::compare(x, y) < 0
   guard E::compare(y, z) < 0
   let w = 4
   create2(w, singleton(x), y, singleton(z))
 }
 
-fn seems_smaller[E](t1: Tree[E], t2: Tree[E]) -> Bool {
+fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
   match (t1, t2) {
     (TLeaf, TLeaf) => false
     (TLeaf, _) => true
     (_, TLeaf) => false
-    (TNode (w=w1, ..), TNode (w=w2, ..)) => w1 < w2
+    (TNode(w=w1, ..), TNode(w=w2, ..)) => w1 < w2
   }
 }
 
-fn destruct[E](t: Tree[E]) -> (Tree[E], E, Tree[E]) {
+fn destruct[E](t : Tree[E]) -> (Tree[E], E, Tree[E]) {
   match t {
     // TODO: panic or assert or raise ?
     TLeaf => panic()
-    TNode (~l, ~v, ~r, ..) => (l, v, r)
+    TNode(~l, ~v, ~r, ..) => (l, v, r)
   }
 }
 
-fn destructw[E](w: Int, t: Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
+fn destructw[E](w : Int, t : Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
   let (tl, tv, tr) = destruct(t)
   let wtl = weight(tl)
   let wtr = w - wtl
@@ -139,11 +144,17 @@ fn destructw[E](w: Int, t: Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
   (wtl, tl, tv, wtr, tr)
 }
 
-fn balance_right_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn balance_right_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard right_heavy(wl, wr)
   let (wrl, rl, rv, wrr, rr) = destructw(wr, r)
-  if like_weights(wl, wrl) && like_weights(wl+wrl, wrr) {
+  if like_weights(wl, wrl) && like_weights(wl + wrl, wrr) {
     // Rotate left
     let w = wl + wr
     create2(w, create1(wl, l, v, wrl, rl), rv, rr)
@@ -151,11 +162,22 @@ fn balance_right_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tre
     // Rotate left and right
     let (wrll, rll, rlv, wrlr, rlr) = destructw(wrl, rl)
     let w = wl + wr
-    create2(w, create1(wl, l, v, wrll, rll), rlv, create1(wrlr, rlr, rv, wrr, rr))
+    create2(
+      w,
+      create1(wl, l, v, wrll, rll),
+      rlv,
+      create1(wrlr, rlr, rv, wrr, rr),
+    )
   }
 }
 
-fn balance_maybe_right_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn balance_maybe_right_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard not_left_heavy(wl, wr)
   if not_right_heavy(wl, wr) {
@@ -165,11 +187,17 @@ fn balance_maybe_right_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) 
   }
 }
 
-fn balance_left_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn balance_left_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard left_heavy(wl, wr)
   let (wll, ll, lv, wlr, lr) = destructw(wl, l)
-  if like_weights(wlr, wr) && like_weights(wll, wlr+wr) {
+  if like_weights(wlr, wr) && like_weights(wll, wlr + wr) {
     // Rotate right
     let w = wl + wr
     create2(w, ll, lv, create1(wlr, lr, v, wr, r))
@@ -177,11 +205,22 @@ fn balance_left_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree
     // Rotate right and left
     let (wlrl, lrl, lrv, wlrr, lrr) = destructw(wlr, lr)
     let w = wl + wr
-    create2(w, create1(wll, ll, lv, wlrl, lrl), lrv, create1(wlrr, lrr, v, wr, r))
+    create2(
+      w,
+      create1(wll, ll, lv, wlrl, lrl),
+      lrv,
+      create1(wlrr, lrr, v, wr, r),
+    )
   }
 }
 
-fn balance_maybe_left_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn balance_maybe_left_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard not_right_heavy(wl, wr)
   if not_left_heavy(wl, wr) {
@@ -191,7 +230,12 @@ fn balance_maybe_left_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -
   }
 }
 
-fn join_maybe_left_heavy[E](l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn join_maybe_left_heavy[E](
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wr == weight(r)
   let wl = weight(l)
   guard not_right_heavy(wl, wr)
@@ -202,14 +246,31 @@ fn join_maybe_left_heavy[E](l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
   }
 }
 
-fn join_left_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn join_left_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard left_heavy(wl, wr)
   let (wll, ll, lv, wlr, lr) = destructw(wl, l)
-  balance_maybe_right_heavy(wll, ll, lv, wlr+wr, join_maybe_left_heavy(lr, v, wr, r))
+  balance_maybe_right_heavy(
+    wll,
+    ll,
+    lv,
+    wlr + wr,
+    join_maybe_left_heavy(lr, v, wr, r),
+  )
 }
 
-fn join_maybe_right_heavy[E](wl: Int, l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn join_maybe_right_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l)
   let wr = weight(r)
   guard not_left_heavy(wl, wr)
@@ -220,16 +281,28 @@ fn join_maybe_right_heavy[E](wl: Int, l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
   }
 }
 
-fn join_right_heavy[E](wl: Int, l: Tree[E], v: E, wr: Int, r: Tree[E]) -> Tree[E] {
+fn join_right_heavy[E](
+  wl : Int,
+  l : Tree[E],
+  v : E,
+  wr : Int,
+  r : Tree[E]
+) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   guard right_heavy(wl, wr)
   let (wrl, rl, rv, wrr, rr) = destructw(wr, r)
-  balance_maybe_left_heavy(wl+wrl, join_maybe_right_heavy(wl, l, v, rl), rv, wrr, rr)
+  balance_maybe_left_heavy(
+    wl + wrl,
+    join_maybe_right_heavy(wl, l, v, rl),
+    rv,
+    wrr,
+    rr,
+  )
 }
 
-fn join[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn join[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let wl = weight(l)
-  let wr= weight(r)
+  let wr = weight(r)
   if not_left_heavy(wl, wr) {
     if not_right_heavy(wl, wr) {
       // Balanced
@@ -244,7 +317,7 @@ fn join[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
   }
 }
 
-fn join_neighbors[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn join_neighbors[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let wl = weight(l)
   let wr = weight(r)
   if not_left_heavy(wl, wr) {
@@ -287,7 +360,7 @@ fn join_neighbors[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   }
 // }
 
-fn join_weight_balanced[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+fn join_weight_balanced[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   create(l, v, r)
 }
 
@@ -298,7 +371,6 @@ fn join_weight_balanced[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 // fn join_quasi_siblings[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   bal(l, v, r)
 // }
-
 
 // fn add_min_element[E](x: E, t: Tree[E]) -> Tree[E] {
 //   match t {
@@ -314,7 +386,7 @@ fn join_weight_balanced[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   }
 // }
 
-fn scheme[E: Compare]() -> @base.Joinable[Tree[E], E] {
+fn scheme[E : Compare]() -> @base.Joinable[Tree[E], E] {
   {
     view,
     join,
@@ -328,6 +400,6 @@ fn scheme[E: Compare]() -> @base.Joinable[Tree[E], E] {
     doubleton,
     tripleton,
     seems_smaller,
-    check
+    check,
   }
 }
