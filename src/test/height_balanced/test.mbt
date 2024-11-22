@@ -1,3 +1,5 @@
+// These testcases are based on MoonBit's @immut/sorted_set library.
+
 test "new" {
   let empty: @height.Set[Int] = @height.empty()
   inspect!(empty, content="@height.of_array([])")
