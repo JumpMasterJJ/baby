@@ -4,8 +4,8 @@
   ],
   "pre-build": [
     {
-      "input": "../base", // fill with your baby/src/base package directory
-      "output": ".", // fill with your current package directory
+      "input": "../base",
+      "output": ".",
       "command": "python3 $input/set_generator.py $output && python3 $input/map_generator.py $output"
     }
   ]
