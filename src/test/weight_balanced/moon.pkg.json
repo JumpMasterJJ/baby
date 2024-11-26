@@ -1,6 +1,5 @@
 {
   "import": [
-    "jump/baby/main/weight",
-    "jump/baby/main/base"
+    "jump/baby/weight"
   ]
 }
