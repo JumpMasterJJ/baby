@@ -1,5 +1,12 @@
 {
   "import": [
     "jump/baby/main/base"
+  ],
+  "pre-build": [
+    {
+      "input": "../base", // base package directory
+      "output": ".", // current package directory
+      "command": "python3 $input/set_generator.py $output"
+    }
   ]
 }
