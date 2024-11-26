@@ -19,20 +19,6 @@
 ///   }
 /// }
 
-// let rec union (t1 : tree) (t2 : tree) : tree =
-//   match VIEW(t1), VIEW(t2) with
-//   | LEAF, _ ->
-//       t2
-//   | _, LEAF ->
-//       t1
-//   | NODE(l1, k1, r1), NODE(l2, k2, r2) ->
-//       if BOTH_EMPTY(l1, r1) then add k1 t2 else
-//       if BOTH_EMPTY(l2, r2) then add k2 t1 else
-//       let l1, r1 = split13 k2 t1 in
-//       let l = union l1 l2
-//       and r = union r1 r2 in
-//       if l == l2 && r == r2 then t2 else (* preserve sharing *)
-//       join l k2 r
 pub fn Joinable::union[T, E : Compare](
   scheme : Joinable[T, E],
   t1 : T,
