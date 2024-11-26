@@ -6,7 +6,7 @@ Currently, the height balance strategy and weight balance strategy are supported
 ## Installation and Usage
 To use this library, you should add a dependency on it by running the command line with [`moon`](https://moonbitlang.github.io/moon/zh/):
 ```shell
-moon add jump/baby
+moon add jumpping/baby
 ```
 
 ## Advanced Uasge

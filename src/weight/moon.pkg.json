@@ -1,6 +1,6 @@
 {
   "import": [
-    "jump/baby/base"
+    "jumpping/baby/base"
   ],
   "pre-build": [
     {

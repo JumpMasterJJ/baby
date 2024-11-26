@@ -1,10 +1,10 @@
 {
-  "name": "jump/baby",
+  "name": "jumpping/baby",
   "version": "0.1.0",
   "readme": "README.md",
   "repository": "",
   "license": "Apache-2.0",
   "keywords": [],
-  "description": "",
+  "description": "Ordered set based on balanced binary tree",
   "source": "src"
 }
