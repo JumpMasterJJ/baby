@@ -1,4 +1,4 @@
-fn max(x : Int, y : Int) -> Int {
+fn Tree::max(x : Int, y : Int) -> Int {
   if x <= y {
     y
   } else {
@@ -6,68 +6,68 @@ fn max(x : Int, y : Int) -> Int {
   }
 }
 
-// fn height[E](t: Tree[E]) -> Int {
+// fn Tree::height[E](t: Tree[E]) -> Int {
 //   match t {
 //     TLeaf => 0
 //     TNode (~h, ..) => h
 //   }
 // }
 
-fn weight[E](t : Tree[E]) -> Int {
+fn Tree::weight[E](t : Tree[E]) -> Int {
   match t {
     TLeaf => 1
     TNode(~w, ..) => w
   }
 }
 
-fn view[E](t : Tree[E]) -> View[Tree[E], E] {
+fn Tree::view[E](t : Tree[E]) -> View[Tree[E], E] {
   match t {
     TLeaf => Leaf
     TNode(~l, ~v, ~r, ..) => Node(l, v, r)
   }
 }
 
-fn leaf[E]() -> Tree[E] {
+fn Tree::leaf[E]() -> Tree[E] {
   TLeaf
 }
 
 let constant_time_cardinal = true
 
-fn cardinal[E](t : Tree[E]) -> Int {
+fn Tree::cardinal[E](t : Tree[E]) -> Int {
   weight(t) - 1
 }
 
 let alpha = 29
 
-fn not_left_heavy(wl : Int, wr : Int) -> Bool {
+fn Tree::not_left_heavy(wl : Int, wr : Int) -> Bool {
   alpha * wl <= (100 - alpha) * wr
 }
 
-fn left_heavy(wl : Int, wr : Int) -> Bool {
+fn Tree::left_heavy(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wl, wr) |> not
 }
 
-fn not_right_heavy(wl : Int, wr : Int) -> Bool {
+fn Tree::not_right_heavy(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wr, wl)
 }
 
-fn right_heavy(wl : Int, wr : Int) -> Bool {
+fn Tree::right_heavy(wl : Int, wr : Int) -> Bool {
   not_right_heavy(wl, wr) |> not
 }
 
-fn like_weights(wl : Int, wr : Int) -> Bool {
+fn Tree::like_weights(wl : Int, wr : Int) -> Bool {
   not_left_heavy(wl, wr) && not_right_heavy(wl, wr)
 }
 
-fn siblings[E](l : Tree[E], r : Tree[E]) -> Bool {
+fn Tree::siblings[E](l : Tree[E], r : Tree[E]) -> Bool {
   like_weights(weight(l), weight(r))
 }
 
-// fn quasi_siblings[E](l: Tree[E], r: Tree[E]) -> Bool {
+// fn Tree::quasi_siblings[E](l: Tree[E], r: Tree[E]) -> Bool {
 //   Int::abs(height(l) - height(r)) <= 3
 // }
 
-fn check[E](t : Tree[E]) -> Unit {
+fn Tree::check[E](t : Tree[E]) -> Unit {
   match t {
     TLeaf => ()
     TNode(~l, ~r, ~w, ..) => {
@@ -80,46 +80,46 @@ fn check[E](t : Tree[E]) -> Unit {
   }
 }
 
-fn create2[E](w : Int, l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
+fn Tree::create2[E](w : Int, l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   guard siblings(l, r)
   guard w == weight(l) + weight(r)
   TNode(~l, ~v, ~r, ~w)
 }
 
-fn create[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
+fn Tree::create[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let w = weight(l) + weight(r)
   create2(w, l, v, r)
 }
 
-fn create1[E](wl : Int, l : Tree[E], v : E, wr : Int, r : Tree[E]) -> Tree[E] {
+fn Tree::create1[E](wl : Int, l : Tree[E], v : E, wr : Int, r : Tree[E]) -> Tree[E] {
   guard wl == weight(l) && wr == weight(r)
   let w = wl + wr
   create2(w, l, v, r)
 }
 
-// fn join_siblings[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+// fn Tree::join_siblings[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   create(l, v ,r)
 // }
 
-fn singleton[E](x : E) -> Tree[E] {
+fn Tree::singleton[E](x : E) -> Tree[E] {
   let w = 2
   create2(w, TLeaf, x, TLeaf)
 }
 
-fn doubleton[E : Compare](x : E, y : E) -> Tree[E] {
+fn Tree::doubleton[E : Compare](x : E, y : E) -> Tree[E] {
   guard E::compare(x, y) < 0
   let w = 3
   create2(w, TLeaf, x, singleton(y))
 }
 
-fn tripleton[E : Compare](x : E, y : E, z : E) -> Tree[E] {
+fn Tree::tripleton[E : Compare](x : E, y : E, z : E) -> Tree[E] {
   guard E::compare(x, y) < 0
   guard E::compare(y, z) < 0
   let w = 4
   create2(w, singleton(x), y, singleton(z))
 }
 
-fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
+fn Tree::seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
   match (t1, t2) {
     (TLeaf, TLeaf) => false
     (TLeaf, _) => true
@@ -128,12 +128,12 @@ fn seems_smaller[E](t1 : Tree[E], t2 : Tree[E]) -> Bool {
   }
 }
 
-fn destruct[E](t : Tree[E]) -> (Tree[E], E, Tree[E]) {
+fn Tree::destruct[E](t : Tree[E]) -> (Tree[E], E, Tree[E]) {
   guard let TNode(~l, ~v, ~r, ..) = t
   (l, v, r)
 }
 
-fn destructw[E](w : Int, t : Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
+fn Tree::destructw[E](w : Int, t : Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
   let (tl, tv, tr) = destruct(t)
   let wtl = weight(tl)
   let wtr = w - wtl
@@ -141,7 +141,7 @@ fn destructw[E](w : Int, t : Tree[E]) -> (Int, Tree[E], E, Int, Tree[E]) {
   (wtl, tl, tv, wtr, tr)
 }
 
-fn balance_right_heavy[E](
+fn Tree::balance_right_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -168,7 +168,7 @@ fn balance_right_heavy[E](
   }
 }
 
-fn balance_maybe_right_heavy[E](
+fn Tree::balance_maybe_right_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -184,7 +184,7 @@ fn balance_maybe_right_heavy[E](
   }
 }
 
-fn balance_left_heavy[E](
+fn Tree::balance_left_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -211,7 +211,7 @@ fn balance_left_heavy[E](
   }
 }
 
-fn balance_maybe_left_heavy[E](
+fn Tree::balance_maybe_left_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -227,7 +227,7 @@ fn balance_maybe_left_heavy[E](
   }
 }
 
-fn join_maybe_left_heavy[E](
+fn Tree::join_maybe_left_heavy[E](
   l : Tree[E],
   v : E,
   wr : Int,
@@ -243,7 +243,7 @@ fn join_maybe_left_heavy[E](
   }
 }
 
-fn join_left_heavy[E](
+fn Tree::join_left_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -262,7 +262,7 @@ fn join_left_heavy[E](
   )
 }
 
-fn join_maybe_right_heavy[E](
+fn Tree::join_maybe_right_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -278,7 +278,7 @@ fn join_maybe_right_heavy[E](
   }
 }
 
-fn join_right_heavy[E](
+fn Tree::join_right_heavy[E](
   wl : Int,
   l : Tree[E],
   v : E,
@@ -297,7 +297,7 @@ fn join_right_heavy[E](
   )
 }
 
-fn join[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
+fn Tree::join[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let wl = weight(l)
   let wr = weight(r)
   if not_left_heavy(wl, wr) {
@@ -314,7 +314,7 @@ fn join[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   }
 }
 
-fn join_neighbors[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
+fn Tree::join_neighbors[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   let wl = weight(l)
   let wr = weight(r)
   if not_left_heavy(wl, wr) {
@@ -331,7 +331,7 @@ fn join_neighbors[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   }
 }
 
-// fn bal[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+// fn Tree::bal[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   guard quasi_siblings(l, r)
 //   let hl = height(l)
 //   let hr = height(r)
@@ -357,33 +357,34 @@ fn join_neighbors[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
 //   }
 // }
 
-fn join_weight_balanced[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
+fn Tree::join_weight_balanced[E](l : Tree[E], v : E, r : Tree[E]) -> Tree[E] {
   create(l, v, r)
 }
 
-// fn join_neighbors[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+// fn Tree::join_neighbors[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   bal(l, v, r)
 // }
 
-// fn join_quasi_siblings[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
+// fn Tree::join_quasi_siblings[E](l: Tree[E], v: E, r: Tree[E]) -> Tree[E] {
 //   bal(l, v, r)
 // }
 
-// fn add_min_element[E](x: E, t: Tree[E]) -> Tree[E] {
+// fn Tree::add_min_element[E](x: E, t: Tree[E]) -> Tree[E] {
 //   match t {
 //     TLeaf => singleton(x)
 //     TNode (~l, ~v, ~r, ..) => bal(add_min_element(x, l), v, r)
 //   }
 // }
 
-// fn add_max_element[E](x: E, t: Tree[E]) -> Tree[E] {
+// fn Tree::add_max_element[E](x: E, t: Tree[E]) -> Tree[E] {
 //   match t {
 //     TLeaf => singleton(x)
 //     TNode (~l, ~v, ~r, ..) => bal(l, v, add_max_element(x, r))
 //   }
 // }
 
-fn scheme[E : Compare]() -> @base.Joinable[Tree[E], E] {
+fn Tree::scheme[E : Compare]() -> @base.Joinable[Tree[E], E] {
+  let cardinal = Tree::cardinal
   {
     view,
     join,
