@@ -18,6 +18,10 @@ pub fn Set::remove_max_elt[E : Compare](s : Set[E]) -> Set[E]! {
   scheme().remove_max_elt!(s._)
 }
 
+pub fn Set::cardinal[E : Compare](s : Set[E]) -> Int {
+  s._.cardinal()
+}
+
 pub fn Set::union[E : Compare](s1 : Set[E], s2 : Set[E]) -> Set[E] {
   scheme().union(s1._, s2._)
 }
