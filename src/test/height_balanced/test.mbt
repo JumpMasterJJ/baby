@@ -5,6 +5,22 @@ test "new" {
   inspect!(empty, content="@height.Set::of_array([])")
 }
 
+test "cardinal" {
+  let empty: @height.Set[Int] = @height.Set::empty()
+  inspect!(
+    empty.cardinal(),
+    content="0",
+  )
+  inspect!(
+    @height.Set::of_array([1, 2, 3]).cardinal(),
+    content="3",
+  )
+  inspect!(
+    @height.Set::of_array([1, 2, 3, 4, 5, 6, 7, 8, 9]).cardinal(),
+    content="9",
+  )
+}
+
 test "disjoint" {
   inspect!(
     @height.Set::of_array([1]).disjoint(@height.Set::of_array([1, 2, 3])),

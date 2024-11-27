@@ -5,6 +5,22 @@ test "new" {
   inspect!(empty, content="@weight.of_array([])")
 }
 
+test "cardinal" {
+  let empty: @weight.Set[Int] = @weight.Set::empty()
+  inspect!(
+    empty.cardinal(),
+    content="0",
+  )
+  inspect!(
+    @weight.Set::of_array([1, 2, 3]).cardinal(),
+    content="3",
+  )
+  inspect!(
+    @weight.Set::of_array([1, 2, 3, 4, 5, 6, 7, 8, 9]).cardinal(),
+    content="9",
+  )
+}
+
 test "disjoint" {
   inspect!(
     @weight.of_array([1]).disjoint(@weight.of_array([1, 2, 3])),
@@ -337,24 +353,24 @@ test "iter" {
 //     match (n, xs) {
 //       (0, xs) => (Empty, xs)
 //       (1, [ value, .. asremain ]) =>
-//         (Node(left=Empty, ~value, right=Empty, height=1), remain)
+//         (Node(left=Empty, ~value, right=Empty, weight=1), remain)
 //       (2, [ value, value1, .. asremain ]) =>
 //         (
 //           Node(
-//             left=Node(left=Empty, ~value, right=Empty, height=1),
+//             left=Node(left=Empty, ~value, right=Empty, weight=1),
 //             value=value1,
 //             right=Empty,
-//             height=2,
+//             weight=2,
 //           ),
 //           remain,
 //         )
 //       (3, [ value, value1, value2, .. asremain ]) =>
 //         (
 //           Node(
-//             left=Node(left=Empty, ~value, right=Empty, height=1),
+//             left=Node(left=Empty, ~value, right=Empty, weight=1),
 //             value=value1,
-//             right=Node(left=Empty, value=value2, right=Empty, height=1),
-//             height=2,
+//             right=Node(left=Empty, value=value2, right=Empty, weight=1),
+//             weight=2,
 //           ),
 //           remain,
 //         )
@@ -404,7 +420,7 @@ test "max on non-empty set" {
   inspect!(max_value, content="9")
 }
 
-test "union with different heights" {
+test "union with different weights" {
   let set1 = @weight.of_array([3, 4, 5])
   let set2 = @weight.of_array([4, 5, 6])
   let union_set = set1.union(set2)
@@ -418,7 +434,7 @@ test "disjoint with different sets" {
   inspect!(disjoint, content="true")
 }
 
-test "union with different heights" {
+test "union with different weights" {
   let set1 = @weight.of_array([3, 4, 5])
   let set2 = @weight.of_array([4, 5, 6])
   let union_set = set1.union(set2)
@@ -432,7 +448,7 @@ test "disjoint with different sets" {
   inspect!(disjoint, content="true")
 }
 
-test "union with different heights" {
+test "union with different weights" {
   let set1 = @weight.of_array([3, 4, 5])
   let set2 = @weight.of_array([4, 5, 6])
   let union_set = set1.union(set2)
