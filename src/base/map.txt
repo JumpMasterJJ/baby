@@ -23,6 +23,18 @@ pub fn Map::add[K : Compare, V](m : Map[K, V], k : K, v : V) -> Map[K, V] {
   scheme().add(Pair((k, v)), m._)
 }
 
+pub fn Map::update[K : Compare, V : Default](
+  m : Map[K, V],
+  k : K,
+  f : (V?) -> V?
+) -> Map[K, V] {
+  let old_opt = scheme().find_opt(dummy(k), m._)
+  match f(old_opt.map(fn(p) { p._.1 })) {
+    Some(v) => scheme().add(Pair((k, v)), m._)
+    None => scheme().remove(dummy(k), m._)
+  }
+}
+
 pub fn Map::remove[K : Compare, V : Default](m : Map[K, V], k : K) -> Map[K, V] {
   scheme().remove(dummy(k), m._)
 }
@@ -67,49 +79,44 @@ pub fn Map::min_binding[K : Compare, V](m : Map[K, V]) -> Pair[K, V]! {
   scheme().min_elt!(m._)
 }
 
-pub fn Map::min_binding_opt[K : Compare, V](s : Map[K, V]) -> Pair[K, V]? {
-  scheme().min_elt_opt(s._)
+pub fn Map::min_binding_opt[K : Compare, V](m : Map[K, V]) -> Pair[K, V]? {
+  scheme().min_elt_opt(m._)
 }
 
-pub fn Map::max_elt[K : Compare, V](s : Map[K, V]) -> Pair[K, V]! {
-  scheme().max_elt!(s._)
+pub fn Map::max_elt[K : Compare, V](m : Map[K, V]) -> Pair[K, V]! {
+  scheme().max_elt!(m._)
 }
 
-pub fn Map::max_elt_opt[K : Compare, V](s : Map[K, V]) -> Pair[K, V]? {
-  scheme().max_elt_opt(s._)
+pub fn Map::max_elt_opt[K : Compare, V](m : Map[K, V]) -> Pair[K, V]? {
+  scheme().max_elt_opt(m._)
 }
 
-pub fn Map::choose[K : Compare, V](s : Map[K, V]) -> Pair[K, V]! {
-  scheme().choose!(s._)
+pub fn Map::choose[K : Compare, V](m : Map[K, V]) -> Pair[K, V]! {
+  scheme().choose!(m._)
 }
 
-pub fn Map::choose_opt[K : Compare, V](s : Map[K, V]) -> Pair[K, V]? {
-  scheme().choose_opt(s._)
+pub fn Map::choose_opt[K : Compare, V](m : Map[K, V]) -> Pair[K, V]? {
+  scheme().choose_opt(m._)
 }
 
-pub fn Map::mem[K : Compare, V : Default](s : Map[K, V], x : K) -> Bool {
-  scheme().mem(dummy(x), s._)
+pub fn Map::mem[K : Compare, V : Default](m : Map[K, V], x : K) -> Bool {
+  scheme().mem(dummy(x), m._)
 }
 
-pub fn Map::find[K : Compare, V : Default](m : Map[K, V], x : K) -> Pair[K, V]! {
-  scheme().find!(dummy(x), m._)
+pub fn Map::find[K : Compare, V : Default](m : Map[K, V], x : K) -> V! {
+  scheme().find!(dummy(x), m._)._.1
 }
 
 pub fn Map::find_opt[K : Compare, V : Default](
   s : Map[K, V],
   x : K
-) -> Pair[K, V]? {
-  scheme().find_opt(dummy(x), s._)
+) -> V? {
+  scheme().find_opt(dummy(x), s._).map(fn(p) { p._.1 })
 }
 
 pub fn Map::disjoint[K : Compare, V](m1 : Map[K, V], m2 : Map[K, V]) -> Bool {
   scheme().disjoint(m1._, m2._)
 }
-
-// TODO: no need to implement this for map operation
-// pub fn Map::subset[K: Compare, V](m1 : Map[K, V], m2 : Map[K, V]) -> Bool {
-//   scheme().subMap(m1._, m2._)
-// }
 
 pub fn Map::equal[K : Compare, V](m1 : Map[K, V], m2 : Map[K, V]) -> Bool {
   scheme().equal(m1._, m2._)
@@ -138,10 +145,6 @@ pub fn Map::of_array[K : Compare, V](a : Array[(K, V)]) -> Map[K, V] {
 pub fn Map::to_array[K : Compare, V](m : Map[K, V]) -> Array[(K, V)] {
   scheme().to_array(m._).map(fn(p) { p._ })
 }
-
-// TODO: scheme().to_seq
-// TODO: scheme().to_seq_from
-// TODO: scheme().to_rev_seq
 
 // TODO: rename the method
 pub fn Map::iter_[K : Compare, V](m : Map[K, V], f : ((K, V)) -> Unit) -> Unit {
@@ -217,7 +220,6 @@ pub fn Map::filter_map[K : Compare, V](
   m : Map[K, V],
   p : ((K, V)) -> (K, V)?
 ) -> Map[K, V]! {
-  // TODO:
   scheme().filter_map!(
     fn(pa : Pair[K, V]) { p(pa._).map(fn(pa) { Pair(pa) }) },
     m._,
@@ -279,4 +281,13 @@ pub fn Map::iter[K, V](s : Map[K, V]) -> Iter[(K, V)] {
   )
 }
 
-// TODO: enum module
+// TODO: 
+// pub fn Map::merge
+// pub fn Map::union - rewrite
+// pub fn Map::bindings
+// pub fn Map::iter_ - rename
+// pub fn Map::map - rewrite
+// pub fn Map::mapi
+// pub fn Map::equal - rewrite
+// pub fn Map::compare - rewrite
+// pub fn Map::cardinal
